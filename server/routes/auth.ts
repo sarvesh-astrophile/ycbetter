@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import type { Context } from "@/context";
-import { zValidator } from "@hono/zod-validator";
+import { zValidator } from "@/utils/validator";
 import { loginSchema, type SuccessResponse } from "@/shared/types";
 import { lucia } from "@/lucia";
 import { generateId } from "lucia";

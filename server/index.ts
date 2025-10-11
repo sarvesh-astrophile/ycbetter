@@ -1,10 +1,12 @@
-import type { ErrorResponse } from "@/shared/types";
+import type { ErrorResponse, ValidationErrorResponse } from "@/shared/types";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { lucia } from "./lucia";
 import { cors } from "hono/cors";
 import type { Context } from "./context";
 import { authRoutes } from "./routes/auth";
+import { postRoutes } from "./routes/posts";
+import { ZodError } from "zod";
 
 const app = new Hono<Context>();
 
@@ -22,7 +24,7 @@ app.use("*", cors(), async (c, next) => {
     c.header("Set-Cookie", lucia.createSessionCookie(session.id).serialize(), {
       append: true,
     });
-  }
+  } 
   if (!session) {
     c.header("Set-Cookie", lucia.createBlankSessionCookie().serialize(), {
       append: true,
@@ -33,9 +35,19 @@ app.use("*", cors(), async (c, next) => {
   return next();
 });
 
-const routes = app.basePath("/api").route("/auth", authRoutes);
+const routes = app.basePath("/api").route("/auth", authRoutes).route("/posts", postRoutes);
 
 app.onError((err, c) => {
+  if (err instanceof ZodError) {
+    return c.json<ValidationErrorResponse>({
+      success: false,
+      error: {
+        issues: err.issues,
+        name: "ZodError",
+      },
+    }, 400);
+  }
+  
   if (err instanceof HTTPException) {
     const errResponse = err.res ?? c.json<ErrorResponse>(
       {
@@ -50,6 +62,7 @@ app.onError((err, c) => {
     );
     return errResponse;
   }
+  
   return c.json<ErrorResponse>({
     success: false,
     error: process.env.NODE_ENV === "production" 

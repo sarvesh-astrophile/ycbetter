@@ -2,6 +2,9 @@
   "name": "ycbetter",
   "scripts": {
     "dev": "bun run --hot server/index.ts",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:generate": "drizzle-kit generate",
     "format:check": "prettier --check .",
     "format:write": "prettier --write ."
   },
@@ -9,6 +12,7 @@
     "@hono/zod-validator": "^0.7.3",
     "@lucia-auth/adapter-drizzle": "^1.1.0",
     "drizzle-orm": "^0.44.6",
+    "drizzle-zod": "^0.8.3",
     "hono": "^4.9.9",
     "lucia": "^3.2.2",
     "postgres": "^3.4.7",
