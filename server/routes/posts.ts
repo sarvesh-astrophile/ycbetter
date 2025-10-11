@@ -113,10 +113,8 @@ postRoutes.get("/", zValidator("query", paginationSchema), async (c) => {
 });
 
 postRoutes.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), async (c) => {
-    console.log("upvote route");
     const { id } = c.req.valid("param");
     const user = c.get("user")!;
-    console.log(id, user.id);
     let pointsChange: -1 | 1 = 1;
 
     const points = await db.transaction(async (tx) => {
@@ -129,7 +127,6 @@ postRoutes.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.co
                     eq(postUpvotesTable.userId, user.id)
                 )
             ).limit(1);
-        console.log(existingUpvote);
         pointsChange = existingUpvote ? -1 : 1;
 
         const [updated] = await tx
@@ -144,7 +141,6 @@ postRoutes.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.co
                 points: postsTable.points,
             })
             
-        console.log(updated);
         if (!updated) {
             throw new HTTPException(404, {
                 message: "Post not found",
@@ -166,7 +162,6 @@ postRoutes.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.co
 
         return updated.points;
     });
-    console.log(points);
 
     return c.json<SuccessResponse<{ count: number, isUpvoted: boolean }>>({
         success: true,

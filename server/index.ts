@@ -7,6 +7,7 @@ import type { Context } from "./context";
 import { authRoutes } from "./routes/auth";
 import { postRoutes } from "./routes/posts";
 import { ZodError } from "zod";
+import { commentRoutes } from "./routes/comments";
 
 const app = new Hono<Context>();
 
@@ -35,7 +36,11 @@ app.use("*", cors(), async (c, next) => {
   return next();
 });
 
-const routes = app.basePath("/api").route("/auth", authRoutes).route("/posts", postRoutes);
+const routes = app
+  .basePath("/api")
+  .route("/auth", authRoutes)
+  .route("/posts", postRoutes)
+  .route("/comments", commentRoutes);
 
 app.onError((err, c) => {
   if (err instanceof ZodError) {
