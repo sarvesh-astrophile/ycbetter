@@ -6,7 +6,9 @@
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
     "format:check": "prettier --check .",
-    "format:write": "prettier --write ."
+    "format:write": "prettier --write .",
+    "lint:server": "cd server && eslint .",
+    "lint:frontend": "cd frontend && eslint ."
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.3",

@@ -1,0 +1,11 @@
+{
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.inlineSuggest.enabled": true,
+    "tailwindCSS.experimental.configFile": "./frontend/src/globals.css",
+        "tailwindCSS.includeLanguages": {
+        "typescript": "typescript",
+        "typescriptreact": "typescriptreact"
+    }
+}
