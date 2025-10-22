@@ -6,7 +6,7 @@ export const zValidator = <T extends ZodType, Target extends keyof ValidationTar
   target: Target,
   schema: T
 ) =>
-  zv(target, schema, (result, c) => {
+  zv(target, schema, (result) => {
     if (!result.success) {
       throw result.error;
     }

@@ -31,9 +31,9 @@ export function SiteHeader() {
                   </SheetDescription>
                 </SheetHeader>
                 <nav className="flex flex-col space-y-2">
-                  <Link to="/" className="hover:underline">Home</Link>
-                  <Link to="/about" className="hover:underline">About</Link>
-                  <Link to="/contact" className="hover:underline">Contact</Link>
+                  <div className="hover:underline">Home</div>
+                  <div className="hover:underline">About</div>
+                  <div className="hover:underline">Contact</div>
                 </nav>
               </SheetContent>
             </Sheet>

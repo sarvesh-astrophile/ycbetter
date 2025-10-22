@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
+import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { SiteHeader } from '@/components/site-header'
@@ -16,8 +15,8 @@ function RootComponent() {
         <main className="container mx-auto grow p-4">
           <Outlet />
         </main>
-        <footer className="text-center p-4">
-          <p className="text-sm text-center text-muted-foreground">
+        <footer className="p-4 text-center">
+          <p className="text-center text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} YC Better. All rights reserved.
           </p>
         </footer>

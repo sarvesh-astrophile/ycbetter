@@ -5,7 +5,7 @@ import { zValidator } from "@/utils/validator";
 import { createCommentSchema, createPostSchema, paginationSchema, type PaginatedResponse, type Post, type SuccessResponse, type Comment } from "@/shared/types";
 import { postsTable } from "@/db/schema/posts";
 import { db } from "@/adapter";
-import { asc, desc, countDistinct, and, sql, exists, isNull } from "drizzle-orm";
+import { asc, desc, countDistinct, and, sql, isNull } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { getISOFormatDateQuery } from "@/utils/postformat";
 import { userTable } from "@/db/schema/auth";
@@ -326,7 +326,7 @@ postRoutes.get("/:id", zValidator("param", z.object({ id: z.coerce.number() })),
     const { id } = c.req.valid("param");
     const user = c.get("user");
 
-    let postsQuery = db
+    const postsQuery = db
     .select({
         id: postsTable.id,
         title: postsTable.title,

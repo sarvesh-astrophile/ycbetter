@@ -7,7 +7,7 @@ import { loggedin } from "@/middleware/loggedin";
 import { postsTable } from "@/db/schema/posts";
 import { db } from "@/adapter";
 import { commentsTable } from "@/db/schema/comments";
-import { eq, and, sql, asc, desc, countDistinct, isNull } from "drizzle-orm";
+import { eq, and, sql, asc, desc, countDistinct } from "drizzle-orm";
 import { HTTPException } from "hono/http-exception";
 import { getISOFormatDateQuery } from "@/utils/postformat";
 import { commentUpvotesTable } from "@/db/schema/upvotes";

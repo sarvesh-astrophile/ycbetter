@@ -36,7 +36,7 @@ app.use("*", cors(), async (c, next) => {
   return next();
 });
 
-const routes = app
+export const routes = app
   .basePath("/api")
   .route("/auth", authRoutes)
   .route("/posts", postRoutes)
