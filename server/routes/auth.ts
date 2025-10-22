@@ -11,9 +11,8 @@ import { HTTPException } from "hono/http-exception";
 import { eq } from "drizzle-orm";
 import { loggedin } from "@/middleware/loggedin";
 
-export const authRoutes = new Hono<Context>();
-
-authRoutes.post(
+export const authRoutes = new Hono<Context>()
+.post(
     "/signup", 
     zValidator("form", loginSchema),  
     async (c) => {
@@ -58,9 +57,8 @@ authRoutes.post(
             });
         }
     }
-);
-
-authRoutes.post(
+)
+.post(
     "/login",
     zValidator("form", loginSchema),
     async (c) => {
@@ -96,9 +94,8 @@ authRoutes.post(
             message: "Logged in successfully",
         }, 200);
     }
-);
-
-authRoutes.post(
+)
+.post(
     "/logout",
     async (c) => {
         const session = c.get("session");
@@ -114,9 +111,8 @@ authRoutes.post(
 
         return c.redirect("/");
     }
-);
-
-authRoutes.get(
+)
+.get(
     "/user",
     loggedin,
     async (c) => {

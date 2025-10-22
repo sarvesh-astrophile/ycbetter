@@ -12,9 +12,8 @@ import { HTTPException } from "hono/http-exception";
 import { getISOFormatDateQuery } from "@/utils/postformat";
 import { commentUpvotesTable } from "@/db/schema/upvotes";
 
-export const commentRoutes = new Hono<Context>();
-
-commentRoutes.post("/:id", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), zValidator("form", createCommentSchema), async (c) => {
+export const commentRoutes = new Hono<Context>()
+.post("/:id", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), zValidator("form", createCommentSchema), async (c) => {
     const { id } = c.req.valid("param");
     const { content } = c.req.valid("form");
     const user = c.get("user")!;
@@ -99,9 +98,8 @@ commentRoutes.post("/:id", loggedin, zValidator("param", z.object({ id: z.coerce
             },
         } as Comment,
     }, 200);
-});
-
-commentRoutes.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), async (c) => {
+})
+.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), async (c) => {
     const { id } = c.req.valid("param");
     const user = c.get("user")!;
     let pointsChange: -1 | 1 = 1;
@@ -156,10 +154,8 @@ commentRoutes.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z
         message: "Comment updated successfully",
         data: { count: points, commentUpvotes: pointsChange === 1 ? [{ userId: user.id }] : [] },
     }, 200);
-});
-
-
-commentRoutes.get("/:id/comments", zValidator("param", z.object({ id: z.coerce.number() })), zValidator("query", paginationSchema), async (c) => {
+})
+.get("/:id/comments", zValidator("param", z.object({ id: z.coerce.number() })), zValidator("query", paginationSchema), async (c) => {
     const { id } = c.req.valid("param");
     const user = c.get("user");
     const { limit, page, sortBy, order } = c.req.valid("query");

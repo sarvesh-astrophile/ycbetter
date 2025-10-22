@@ -15,8 +15,7 @@ import { HTTPException } from "hono/http-exception";
 import { commentsTable } from "@/db/schema/comments";
 
 export const postRoutes = new Hono<Context>()
-
-postRoutes.post("/", loggedin, zValidator("form", createPostSchema), async (c) => {
+.post("/", loggedin, zValidator("form", createPostSchema), async (c) => {
     const { title, url, content } = c.req.valid("form");
     const user = c.get("user")!;
     const [post] = await db.insert(postsTable).values({
@@ -36,9 +35,8 @@ postRoutes.post("/", loggedin, zValidator("form", createPostSchema), async (c) =
             postId: post!.id,
         },
     });
-});
-
-postRoutes.get("/", zValidator("query", paginationSchema), async (c) => {
+})
+.get("/", zValidator("query", paginationSchema), async (c) => {
     const { limit, page, sortBy, order, author, site } = c.req.valid("query");
     const user = c.get("user");
 
@@ -110,9 +108,8 @@ postRoutes.get("/", zValidator("query", paginationSchema), async (c) => {
             totalPages: Math.ceil(count?.count ?? 0 / limit) as number,
         },
     }, 200);
-});
-
-postRoutes.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), async (c) => {
+})
+.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), async (c) => {
     const { id } = c.req.valid("param");
     const user = c.get("user")!;
     let pointsChange: -1 | 1 = 1;
@@ -168,9 +165,8 @@ postRoutes.post("/:id/upvote", loggedin, zValidator("param", z.object({ id: z.co
         message: "Post updated successfully",
         data: { count: points, isUpvoted: pointsChange === 1 },
     }, 200);
-});
-
-postRoutes.post("/:id/comment", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), zValidator("form", createCommentSchema), async (c) => {
+})
+.post("/:id/comment", loggedin, zValidator("param", z.object({ id: z.coerce.number() })), zValidator("form", createCommentSchema), async (c) => {
         const { id } = c.req.valid("param");
         const { content } = c.req.valid("form");
         const user = c.get("user")!;
@@ -225,9 +221,8 @@ postRoutes.post("/:id/comment", loggedin, zValidator("param", z.object({ id: z.c
             } as Comment,
         }, 200);
     }
-);
-
-postRoutes.get("/:id/comments", zValidator("param", z.object({ id: z.coerce.number() })), zValidator("query", paginationSchema.extend({ includeChildren: z.coerce.boolean().optional() })), async (c) => {
+)
+.get("/:id/comments", zValidator("param", z.object({ id: z.coerce.number() })), zValidator("query", paginationSchema.extend({ includeChildren: z.coerce.boolean().optional() })), async (c) => {
     const { id } = c.req.valid("param");
     const user = c.get("user");
     const { limit, page, sortBy, order, includeChildren } = c.req.valid("query");
@@ -320,9 +315,8 @@ postRoutes.get("/:id/comments", zValidator("param", z.object({ id: z.coerce.numb
             totalPages: Math.ceil(count?.count ?? 0 / limit) as number,
         }
     }, 200);
-});
-
-postRoutes.get("/:id", zValidator("param", z.object({ id: z.coerce.number() })), async (c) => {
+})
+.get("/:id", zValidator("param", z.object({ id: z.coerce.number() })), async (c) => {
     const { id } = c.req.valid("param");
     const user = c.get("user");
 
@@ -370,5 +364,5 @@ postRoutes.get("/:id", zValidator("param", z.object({ id: z.coerce.number() })),
         message: "Post fetched successfully",
         data: post as Post,
     }, 200);
-});
+})
 

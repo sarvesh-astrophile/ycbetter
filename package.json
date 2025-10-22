@@ -11,11 +11,11 @@
     "lint:frontend": "cd frontend && eslint ."
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.7.3",
+    "@hono/zod-validator": "^0.4.1",
     "@lucia-auth/adapter-drizzle": "^1.1.0",
     "drizzle-orm": "^0.44.6",
     "drizzle-zod": "^0.8.3",
-    "hono": "^4.9.9",
+    "hono": "^4.6.3",
     "lucia": "^3.2.2",
     "postgres": "^3.4.7",
     "zod": "^4.1.11"
