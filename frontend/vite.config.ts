@@ -1,17 +1,12 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
-import path from 'path'
+import path from "path";
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    TanStackRouterVite({
-      target: 'react',
-      autoCodeSplitting: true,
-    }),
-    react(),
-  ],
+  plugins: [TanStackRouterVite({}), react()],
   resolve: {
     alias: {
       "@/shared": path.resolve(__dirname, "../shared"),
@@ -26,4 +21,4 @@ export default defineConfig({
       },
     },
   },
-})
+});

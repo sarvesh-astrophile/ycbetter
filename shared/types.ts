@@ -1,9 +1,9 @@
 import { z, ZodError } from "zod";
-import { insertPostSchema } from "../server/db/schema/posts";
-import { insertCommentsSchema } from "../server/db/schema/comments";
-import type { AppRoutes } from "../server/index";
+import { insertPostSchema } from "../server/db/schemas/posts";
+import { insertCommentsSchema } from "../server/db/schemas/comments";
+import type { ApiRoutes } from "../server/index";
 
-export type { AppRoutes };
+export { type ApiRoutes };
 
 export type SuccessResponse<T = void> = {
     success: true;

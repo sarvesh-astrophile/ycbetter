@@ -6,15 +6,10 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/shared/*": [
-        "../shared/*"
-      ],
-      "@/*": [
-        "./src/*"
-      ]
+      "@/shared/*": ["../shared/*"],
+      "@/*": ["./src/*"]
     }
   }
 }

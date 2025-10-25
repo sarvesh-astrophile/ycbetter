@@ -1,16 +1,17 @@
-import type { ErrorResponse, ValidationErrorResponse } from "@/shared/types";
 import { Hono } from "hono";
-import { HTTPException } from "hono/http-exception";
-import { lucia } from "./lucia";
 import { cors } from "hono/cors";
+import { HTTPException } from "hono/http-exception";
+
+import { type ErrorResponse } from "@/shared/types";
+
 import type { Context } from "./context";
-import { authRoutes } from "./routes/auth";
-import { postRoutes } from "./routes/posts";
-import { ZodError } from "zod";
-import { commentRoutes } from "./routes/comments";
+import { lucia } from "./lucia";
+import { authRouter } from "./routes/auth";
+import { commentsRouter } from "./routes/comments";
+import { postRouter } from "./routes/posts";
+import { serveStatic } from "hono/bun";
 
 const app = new Hono<Context>();
-
 
 app.use("*", cors(), async (c, next) => {
   const sessionId = lucia.readSessionCookie(c.req.header("Cookie") ?? "");
@@ -25,7 +26,7 @@ app.use("*", cors(), async (c, next) => {
     c.header("Set-Cookie", lucia.createSessionCookie(session.id).serialize(), {
       append: true,
     });
-  } 
+  }
   if (!session) {
     c.header("Set-Cookie", lucia.createBlankSessionCookie().serialize(), {
       append: true,
@@ -39,44 +40,48 @@ app.use("*", cors(), async (c, next) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const routes = app
   .basePath("/api")
-  .route("/auth", authRoutes)
-  .route("/posts", postRoutes)
-  .route("/comments", commentRoutes);
+  .route("/auth", authRouter)
+  .route("/posts", postRouter)
+  .route("/comments", commentsRouter);
 
 app.onError((err, c) => {
-  if (err instanceof ZodError) {
-    return c.json<ValidationErrorResponse>({
-      success: false,
-      error: {
-        issues: err.issues,
-        name: "ZodError",
-      },
-    }, 400);
-  }
-  
   if (err instanceof HTTPException) {
-    const errResponse = err.res ?? c.json<ErrorResponse>(
-      {
-        success: false,
-        error: err.message,
-        isFormError: 
-          err.cause && typeof err.cause === "object" && "form" in err.cause 
-          ? err.cause.form === true
-          : false,
-      },
-      err.status,
-    );
+    const errResponse =
+      err.res ??
+      c.json<ErrorResponse>(
+        {
+          success: false,
+          error: err.message,
+          isFormError:
+            err.cause && typeof err.cause === "object" && "form" in err.cause
+              ? err.cause.form === true
+              : false,
+        },
+        err.status,
+      );
     return errResponse;
   }
-  
-  return c.json<ErrorResponse>({
-    success: false,
-    error: process.env.NODE_ENV === "production" 
-      ? "Internal Server Error"
-      : (err.stack ?? err.message),
-  }, 500);
+
+  return c.json<ErrorResponse>(
+    {
+      success: false,
+      error:
+        process.env.NODE_ENV === "production"
+          ? "Interal Server Error"
+          : (err.stack ?? err.message),
+    },
+    500,
+  );
 });
 
-export default app;
+app.get("*", serveStatic({ root: "./frontend/dist" }));
+app.get("*", serveStatic({ path: "./frontend/dist/index.html" }));
 
-export type AppRoutes = typeof routes;
+export default {
+  port: process.env["PORT"] || 3000,
+  hostname: "0.0.0.0",
+  fetch: app.fetch,
+};
+
+console.log("Server Running on port", process.env["PORT"] || 3000);
+export type ApiRoutes = typeof routes;

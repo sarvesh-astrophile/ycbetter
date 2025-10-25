@@ -6,10 +6,8 @@ import pluginRouter from "@tanstack/eslint-plugin-router";
 import { includeIgnoreFile } from "@eslint/compat";
 import pluginJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
-// @ts-ignore
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import pluginReact from "eslint-plugin-react";
-// @ts-ignore
 import tailwind from "eslint-plugin-tailwindcss";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -34,7 +32,7 @@ export default [
   {
     settings: {
       tailwindcss: {
-        config: "tailwind.config.mjs",
+        config: "tailwind.config.js",
         callees: ["cn", "cva"],
       },
     },
